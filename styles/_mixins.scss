@@ -1,0 +1,42 @@
+$sides: (top, bottom, left, right, all, vertical, horizontal);
+
+// Generate padding and margin classes in multiples of 4
+@for $i from 1 through 30 {
+  // 30 * 4 = 120
+  $space: $i * 4;
+  @each $side in $sides {
+    @if $side == all {
+      .p-#{$space}px {
+        padding: #{$space}px !important;
+      }
+      .m-#{$space}px {
+        margin: #{$space}px !important;
+      }
+    } @else if $side == vertical {
+      .py-#{$space}px {
+        padding-top: #{$space}px !important;
+        padding-bottom: #{$space}px !important;
+      }
+      .my-#{$space}px {
+        margin-top: #{$space}px !important;
+        margin-bottom: #{$space}px !important;
+      }
+    } @else if $side == horizontal {
+      .px-#{$space}px {
+        padding-left: #{$space}px !important;
+        padding-right: #{$space}px !important;
+      }
+      .mx-#{$space}px {
+        margin-left: #{$space}px !important;
+        margin-right: #{$space}px !important;
+      }
+    } @else {
+      .p#{str-slice($side, 0, 1)}-#{$space}px {
+        padding-#{$side}: #{$space}px !important;
+      }
+      .m#{str-slice($side, 0, 1)}-#{$space}px {
+        margin-#{$side}: #{$space}px !important;
+      }
+    }
+  }
+}

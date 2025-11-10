@@ -1,0 +1,31 @@
+{
+  "name": "nextjs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "format": "prettier --write ."
+  },
+  "dependencies": {
+    "@phosphor-icons/react": "^2.1.10",
+    "@types/node": "20.6.2",
+    "@types/react": "18.2.22",
+    "@types/react-dom": "18.2.7",
+    "autoprefixer": "10.4.15",
+    "bootstrap": "^5.3.8",
+    "eslint": "^9.39.1",
+    "eslint-config-next": "^16.0.1",
+    "next": "^16.0.1",
+    "next-intl": "^4.4.0",
+    "postcss": "8.4.30",
+    "prettier": "^3.6.2",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "sass": "^1.93.3",
+    "scss": "^0.2.4",
+    "typescript": "5.2.2"
+  }
+}

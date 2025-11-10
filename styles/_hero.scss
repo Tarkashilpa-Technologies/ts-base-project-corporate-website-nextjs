@@ -1,0 +1,33 @@
+@import './bootstrap-api';
+@import './mixins';
+
+.hero-container {
+  position: relative;
+  width: 100%;
+}
+
+.homepage-hero-text {
+  position: relative;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  font-size: 32px;
+  font-weight: 400;
+  margin-top: 24px;
+
+  @include media-breakpoint-up(sm) {
+    font-size: 40px;
+    position: absolute;
+  }
+}
+
+.homepage-hero-image {
+  img {
+    object-position: top;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+    max-height: 500px;
+  }
+}

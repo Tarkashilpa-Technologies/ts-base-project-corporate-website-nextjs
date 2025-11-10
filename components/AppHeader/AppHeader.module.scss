@@ -1,0 +1,31 @@
+@import '../../styles/bootstrap-api.scss';
+
+.header {
+  @extend .headerPadding;
+  @extend .headerBackground;
+  @extend .headerFont;
+
+  max-height: 80px;
+}
+
+.headerPadding {
+  padding: 0px 20px;
+
+  @include media-breakpoint-up(md) {
+    padding: 0px 40px;
+  }
+}
+
+.headerBackground {
+  background-color: #070f26;
+}
+
+.headerFont {
+  font-size: 16px;
+  color: white;
+  line-height: 70px;
+
+  @include media-breakpoint-up(md) {
+    line-height: 80px;
+  }
+}

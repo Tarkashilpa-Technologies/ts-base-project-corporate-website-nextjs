@@ -1,0 +1,17 @@
+@import 'bootstrap-api';
+
+.content-wrapper {
+  padding: 0px 20px;
+
+  @include media-breakpoint-up(md) {
+    padding: 0px 40px;
+  }
+
+  @include media-breakpoint-up(lg) {
+    padding: 0px 8%;
+  }
+
+  @include media-breakpoint-up(xxl) {
+    padding: 0px calc((100% - 1200px) / 2);
+  }
+}

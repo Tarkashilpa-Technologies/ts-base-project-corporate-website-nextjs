@@ -1,0 +1,99 @@
+// Base styles for icons
+.icon {
+  // No transition by default (for iconBefore)
+}
+
+// Icon that appears after text - has slide transition
+.iconAfter {
+  transition: transform 0.3s ease;
+}
+
+// Variation 1: Button Link (existing button style)
+.buttonLink {
+  display: inline-flex;
+  align-items: center;
+  border: none;
+  gap: 8px;
+  padding: 5px 40px;
+  background: #ffc400;
+  min-height: 40px;
+  font-size: 16px;
+  color: #070f26;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  transition: all 0.2s;
+  border-radius: 40px;
+  text-decoration: none;
+
+  &:hover {
+    background: #fff;
+    .iconAfter {
+      transform: translateX(5px);
+    }
+  }
+}
+
+// Variation 2: Primary Link (white text, underline on hover)
+.primaryLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+
+  &:hover {
+    text-decoration: underline;
+    .iconAfter {
+      transform: translateX(5px);
+    }
+  }
+}
+
+// Variation 3: Secondary Link (#0072bc text, black on hover with underline)
+.secondaryLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #0072bc;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+
+  &:hover {
+    color: #000;
+    text-decoration: underline;
+    .iconAfter {
+      transform: translateX(5px);
+    }
+  }
+}
+
+// Variation 4: Tertiary Link (#ffc400 text, white on hover, no underline)
+.tertiaryLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #ffc400;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+  text-decoration: none;
+  transition: all 0.2s;
+
+  &:hover {
+    color: #fff;
+    .iconAfter {
+      transform: translateX(5px);
+    }
+  }
+}
