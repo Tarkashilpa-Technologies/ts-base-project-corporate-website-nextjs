@@ -6,23 +6,57 @@
   width: 100%;
 }
 
-.homepage-hero-text {
+.homepage-hero-text-container {
   position: relative;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  font-size: 32px;
-  font-weight: 400;
   margin-top: 24px;
 
   @include media-breakpoint-up(sm) {
     font-size: 40px;
     position: absolute;
   }
+
+  h1 {
+    font-size: 32px;
+    font-weight: 400;
+
+    @include media-breakpoint-up(sm) {
+      font-size: 40px;
+    }
+  }
 }
 
-.homepage-hero-image {
+.subpage-hero-text-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  margin-top: 24px;
+
+  h1 {
+    font-size: 32px;
+    font-weight: 400;
+
+    @include media-breakpoint-up(lg) {
+      font-size: 56px;
+    }
+  }
+
+  p {
+    font-size: 20px;
+    font-weight: 300;
+
+    @include media-breakpoint-up(lg) {
+      font-size: 24px;
+    }
+  }
+}
+
+.hero-background-wrapper {
   img {
     object-position: top;
     object-fit: cover;

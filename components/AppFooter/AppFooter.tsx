@@ -68,12 +68,12 @@ export default function AppFooter() {
             </p>
           </div>
           <div className="col-md-6 text-md-end">
-            <a href="/privacy-policy" className="text-light me-3">
+            <Link href="" className="text-light me-3">
               Privacy Policy
-            </a>
-            <a href="/terms-of-service" className="text-light">
+            </Link>
+            <Link href="/terms-of-service" className="text-light">
               Terms of Service
-            </a>
+            </Link>
           </div>
         </div>
       </div>

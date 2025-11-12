@@ -15,3 +15,23 @@
     padding: 0px calc((100% - 1200px) / 2);
   }
 }
+
+.three-columns-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  // grid-auto-rows: 460px;
+  gap: 50px;
+
+  @include media-breakpoint-up(md) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @include media-breakpoint-up(lg) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.ntt-bg-logo {
+  background: url(/images/bg_nttdata_logo.svg) right top no-repeat #2e404d;
+  background-size: auto 100%;
+}

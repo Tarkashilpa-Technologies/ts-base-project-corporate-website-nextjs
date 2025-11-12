@@ -2,6 +2,7 @@ import { Link } from '../../i18n/navigation';
 import Image from 'next/image';
 import styles from './AppHeader.module.scss';
 import { getTranslations } from 'next-intl/server';
+import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
 
 export default async function AppHeader() {
   const t = await getTranslations('HEADER');
@@ -9,6 +10,10 @@ export default async function AppHeader() {
     {
       title: t('ABOUT'),
       url: '/about',
+    },
+    {
+      title: t('BLOG'),
+      url: '/blog',
     },
     {
       title: t('COMPANY'),
@@ -60,16 +65,7 @@ export default async function AppHeader() {
                   </Link>
                 </li>
               ))}
-              <li>
-                <Link href={'/about'} locale="ms" className={`${styles.headerFont} nav-link`}>
-                  {t('MALAY')}
-                </Link>
-              </li>
-              <li>
-                <Link href={'/about'} locale="en" className={`${styles.headerFont} nav-link`}>
-                  {t('ENGLISH')}
-                </Link>
-              </li>
+              <LanguageSwitcher />
             </ul>
           </div>
         </div>

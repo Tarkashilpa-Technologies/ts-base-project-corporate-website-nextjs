@@ -126,14 +126,14 @@ This section describes the organization of the project’s source code, componen
 
 ## Naming Conventions
 
-| Category            | Naming                   | Example                    |
-| ------------------- | ------------------------ | -------------------------- |
-| **Page file**       | `page.tsx`               | `app/profile/page.tsx`     |
-| **Layout file**     | `layout.tsx`             | `app/dashboard/layout.tsx` |
-| **Component file**  | `PascalCase.tsx`         | `UserCard.tsx`             |
-| **Component style** | `PascalCase.module.scss` | `UserCard.module.scss`     |
-| **Utility/Hook**    | `camelCase.ts`           | `useFetchData.ts`          |
-| **Shared partials** | `_kebab-case.scss`       | `_variables.scss`          |
+| Category                 | Naming                   | Example                    |
+| ------------------------ | ------------------------ | -------------------------- |
+| **Page file**            | `page.tsx`               | `app/profile/page.tsx`     |
+| **Layout file**          | `layout.tsx`             | `app/dashboard/layout.tsx` |
+| **Component file**       | `PascalCase.tsx`         | `UserCard.tsx`             |
+| **Component style**      | `PascalCase.module.scss` | `UserCard.module.scss`     |
+| **Utility/Hook**         | `camelCase.ts`           | `useFetchData.ts`          |
+| **Shared SCSS partials** | `_kebab-case.scss`       | `_variables.scss`          |
 
 ## Naming Notes
 

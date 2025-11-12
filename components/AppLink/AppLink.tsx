@@ -19,6 +19,10 @@ export default function AppLink({
   className?: string;
 }>) {
   // Determine the CSS class based on variant
+  // buttonLink = link with yellow button
+  // primaryLink = white link color doesn't change on hover
+  // secondaryLink = blue link changes to black on hover
+  // tertiaryLink = yellow link changes to white on hover
   const variantClass = styles[variant];
 
   return (

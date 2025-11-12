@@ -1,11 +1,28 @@
 {
   "HEADER": {
     "ABOUT": "Mengenai",
+    "BLOG": "Blog",
     "COMPANY": "Syarikat",
     "NEWS": "Berita",
     "SUSTAINABILITY": "Kemampanan",
     "COUNTRY": "Negara",
     "MALAY": "Melayu",
     "ENGLISH": "Bahasa Inggeris"
+  },
+  "COMMON": {
+    "READ_MORE": "Baca Lagi"
+  },
+  "PAGE_TITLE": {
+    "HOME": "Laman Utama",
+    "ABOUT": "Tentang Kami",
+    "BLOG": "Blog",
+    "BLOG_DETAIL": "{title}",
+    "NEWS": "Berita"
+  },
+  "PAGE_DESCRIPTION": {
+    "HOME": "Tingkatkan pengalaman pelanggan dengan NTT DATA Malaysia. Perunding IT terkemuka yang menyediakan penyelesaian digital inovatif, AI generatif, dan teknologi terkini untuk transformasi perniagaan anda.",
+    "ABOUT": "Ketahui lebih lanjut tentang NTT DATA Malaysia, firma perunding IT terkemuka. Misi, nilai teras, dan dedikasi kami untuk membentuk masyarakat yang lebih baik melalui transformasi digital dan teknologi inovatif.",
+    "BLOG": "Kekal dikemas kini dengan wawasan terkini kami mengenai teknologi, transformasi digital, dan inovasi industri. Terokai artikel, berita, dan pandangan pakar dari NTT DATA Malaysia.",
+    "NEWS": "Kekal dikemas kini dengan berita dan pengumuman terkini dari NTT DATA Malaysia. Temui perkongsian, inovasi, dan perkembangan industri kami."
   }
 }

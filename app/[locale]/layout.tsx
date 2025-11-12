@@ -6,6 +6,9 @@ import AppFooter from '../../components/AppFooter/AppFooter';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
+import { generateSiteMetadata } from '@/data/metadata';
+import { generateOrganizationSchema, generateWebSiteSchema } from '@/data/structured-data';
+import StructuredData from '@/utils/structuredData';
 
 const notoSans = Noto_Sans({
   subsets: ['latin'],
@@ -13,10 +16,14 @@ const notoSans = Noto_Sans({
   display: 'swap',
 });
 
-export const metadata: Metadata = {
-  title: 'NTT Data',
-  description: 'NTT Data is a leading IT consulting firm',
-};
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  return generateSiteMetadata(locale);
+}
 
 export default async function RootLayout({
   children,
@@ -40,8 +47,15 @@ export default async function RootLayout({
     notFound();
   }
 
+  // Generate global structured data
+  const organizationSchema = generateOrganizationSchema(locale);
+  const websiteSchema = generateWebSiteSchema(locale);
+
   return (
     <html lang={locale}>
+      <head>
+        <StructuredData data={[organizationSchema, websiteSchema]} />
+      </head>
       <body className={notoSans.variable} suppressHydrationWarning>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <AppHeader />

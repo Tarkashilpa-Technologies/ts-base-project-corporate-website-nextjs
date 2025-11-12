@@ -1,11 +1,28 @@
 {
   "HEADER": {
     "ABOUT": "About",
+    "BLOG": "Blog",
     "COMPANY": "Company",
     "NEWS": "News",
     "SUSTAINABILITY": "Sustainability",
     "COUNTRY": "Country",
     "MALAY": "Malay",
     "ENGLISH": "English"
+  },
+  "COMMON": {
+    "READ_MORE": "Read More"
+  },
+  "PAGE_TITLE": {
+    "HOME": "Home",
+    "ABOUT": "About Us",
+    "BLOG": "Blog",
+    "BLOG_DETAIL": "{title}",
+    "NEWS": "News"
+  },
+  "PAGE_DESCRIPTION": {
+    "HOME": "Elevate customer experiences with NTT DATA Malaysia. Leading IT consulting firm providing innovative digital solutions, generative AI, and cutting-edge technologies to transform your business.",
+    "ABOUT": "Learn more about NTT DATA Malaysia, a leading IT consulting firm. Our mission, core values, and dedication to shaping a better society through digital transformation and innovative technologies.",
+    "BLOG": "Stay updated with our latest insights on technology, digital transformation, and industry innovations. Explore articles, news, and expert perspectives from NTT DATA Malaysia.",
+    "NEWS": "Stay updated with the latest news and announcements from NTT DATA Malaysia. Discover our partnerships, innovations, and industry developments."
   }
 }
