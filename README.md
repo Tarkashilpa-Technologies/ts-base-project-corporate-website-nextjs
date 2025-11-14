@@ -31,9 +31,11 @@ This section describes the organization of the project's source code, components
 
 ```plaintext
 ├── app/                    # Next.js App Router
-│   ├── [locale]/          # Dynamic locale folder for internationalization
-│   │   ├── layout.tsx     # Layout wrapper for pages that define header, footer and overall structure of Website UI
-│   │   └── page.tsx       # Homepage
+│   ├── [locale]/           # Dynamic locale folder for internationalization
+│   │   ├── layout.tsx      # Layout wrapper for pages that define header, footer and overall structure of Website UI
+│   │   ├── page.tsx        # Homepage
+│   │   ├── not-found.tsx   # Next.js provided file (uses AppPageNotFound component)
+│   │   └── [...not-found]/ # Catch-all folder for unknown routes that trigger not-found
 │   │
 │   └── other-page-folders/ # Additional page folders
 │
@@ -86,7 +88,11 @@ This section describes the organization of the project's source code, components
    - Each folder can include `layout.tsx` and `page.tsx` for modular page-level layouts.
    - Folders can be nested further to organize complex routes or features.
 
-3. **i18n Setup**
+3. **Not found page**
+   - Special Next.js file is defined with `app/[locale]/not-found.tsx` and a catch-all route `app/[locale]/[...not-found]/page.tsx`.
+   - Any unknown URL under `/[locale]/` shows this 404 page inside the main layout (with header, footer, and translations).
+
+4. **i18n Setup**
    - The `i18n/` folder contains all JSON translation files for different locales (e.g., `en.json`, `ms.json`).
    - next-intl helper files manage localization logic:
    - **`routing.ts`** – This file configures which languages our app supports and integrates them with the Next.js routing system.
@@ -94,22 +100,22 @@ This section describes the organization of the project's source code, components
      so they automatically include the active locale from routing.ts.
    - **`request.ts`** – Determines the active locale for the current request.
 
-4. **Components**
+5. **Components**
    - Any reusable UI piece should be converted to component and placed under this directory to be used across the project.
    - Components are modular and use **CSS modules** (`.module.scss`) for scoped styling.
    - This ensures styles are local to each component and prevents global conflicts.
    - Component we build should be prefixed with 'App' (e.g AppHeader, AppButton).
 
-5. **Styles**
+6. **Styles**
    - Global SCSS is organized into partials for variables, mixins, functions, and layout utilities.
    - `main.scss` imports all partials to provide a consistent global style.
    - Any new reusable SCSS should be added as a partial and imported into `main.scss`.
    - Reusable SCSS includes shared styles, like \_utils.scss, that can be used throughout the app.
 
-6. **Middleware**
+7. **Middleware**
    - `middleware.ts` at the root handles locale detection and redirects users to the appropriate language route.
 
-7. **Public Folder**
+8. **Public Folder**
    - Contains static assets such as images, icons, and fonts, accessible directly in the app.
 
 ---
@@ -299,6 +305,42 @@ export default async function Page({ params }) {
 
 - Use [Google Rich Results Test](https://validator.schema.org/) to validate schemas
 - Check for errors and ensure all required fields are present
+
+### 4. Not found (404) page behavior
+
+This project uses a custom 404 page that is always shown inside the normal layout (with header and footer) when a page is not found.
+
+**Files involved**
+
+- `app/[locale]/not-found.tsx`
+  - Special Next.js file that defines the 404 UI.
+  - Renders the `AppPageNotFound` component.
+- `components/AppPageNotFound/AppPageNotFound.tsx`
+  - Shows a user-friendly error message and a "Back to Home" button.
+- `app/[locale]/[...not-found]/page.tsx`
+  - Catch-all route for any URL under `/[locale]/` that does **not** match a real page.
+  - Calls `notFound()` from `next/navigation`, which tells Next.js to render the custom 404 page.
+
+**How routing works**
+
+1. User visits a URL under `/[locale]`, such as `/en/about` or `/ms/news/some-article`.
+2. If the URL matches a real page (like `about`, `blog`, `news`), that page is rendered normally.
+3. If the URL does **not** match a page (for example `/en/about/extra` or `/ms/random-page`):
+   - Next.js uses `app/[locale]/[...not-found]/page.tsx`.
+   - That file calls `notFound()`, which renders `app/[locale]/not-found.tsx`.
+   - The layout `app/[locale]/layout.tsx` still wraps everything, so the header and footer are visible around the 404 content.
+
+**Default locale example: `/dummyurl` → `/en/dummyurl`**
+
+- The app uses a default locale of `en`.
+- When a user opens a URL without a locale (like `/dummyurl`), the middleware redirects or rewrites it to `/en/dummyurl`.
+- If `/en/dummyurl` does not exist, it goes through the same catch-all 404 flow above.
+
+**SEO behavior**
+
+- For URLs that do not exist, the catch-all route calls `notFound()`, so Next.js returns a real **404 status code**.
+- This is correct and safe for SEO: search engines understand that the page does not exist.
+- Real pages (like `/en/about`, `/en/blog/[slug]`, etc.) still return **200** and can be indexed normally.
 
 ## Code Quality
 
