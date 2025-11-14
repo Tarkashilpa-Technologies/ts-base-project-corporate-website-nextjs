@@ -6,7 +6,7 @@ import AppFooter from '../../components/AppFooter/AppFooter';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { notFound } from 'next/navigation';
 import { routing } from '@/i18n/routing';
-import { generateSiteMetadata } from '@/data/metadata';
+import { generateSiteMetadata } from '@/utils/generateSiteMetadata';
 import { generateOrganizationSchema, generateWebSiteSchema } from '@/data/structured-data';
 import StructuredData from '@/utils/structuredData';
 

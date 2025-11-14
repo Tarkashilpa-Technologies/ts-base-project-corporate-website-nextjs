@@ -1,4 +1,4 @@
-import { getNewsBySlug, getAllNews } from '@/utils/getArticlesContentByType';
+import { getNewsBySlug, getAllNews } from '@/utils/fetchArticles';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import AppSection from '../../../../components/AppSection/AppSection';

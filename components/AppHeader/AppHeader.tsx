@@ -2,7 +2,7 @@ import { Link } from '../../i18n/navigation';
 import Image from 'next/image';
 import styles from './AppHeader.module.scss';
 import { getTranslations } from 'next-intl/server';
-import LanguageSwitcher from '../LanguageSwitcher/LanguageSwitcher';
+import LanguageSwitcher from '../AppLanguageSwitcher/AppLanguageSwitcher';
 
 export default async function AppHeader() {
   const t = await getTranslations('HEADER');

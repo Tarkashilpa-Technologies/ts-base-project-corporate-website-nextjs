@@ -76,7 +76,7 @@ This section describes the organization of the project’s source code, componen
 # Project Architecture
 
 1. **App Router with `[locale]`**
-   - Each locale has its own folder under `app/` (e.g., `app/en`, `app/fr`).
+   - Each locale has its own folder under `app/` (e.g., `app/en`, `app/ms`).
    - This enables straightforward localization using **Next.js dynamic routing**.
 
 2. **Additional Page Folders**
@@ -134,6 +134,7 @@ This section describes the organization of the project’s source code, componen
 | **Component style**      | `PascalCase.module.scss` | `UserCard.module.scss`     |
 | **Utility/Hook**         | `camelCase.ts`           | `useFetchData.ts`          |
 | **Shared SCSS partials** | `_kebab-case.scss`       | `_variables.scss`          |
+| **Interface**            | `PascalCase`             | `interface Article {}`     |
 
 ## Naming Notes
 
@@ -143,10 +144,159 @@ This section describes the organization of the project’s source code, componen
   - **Module-specific classes** (CSS Modules) → `camelCase`
   - **Common/global styles** → `kebab-case`
 - **SCSS variables:** Always use `kebab-case` for naming variables (e.g., `$primary-color`, `$font-size-large`).
+- **Utility:** Name the file according to the function it exports. It’s generally a good idea to keep one main function per utility file for clarity. Include more than one function in a utility file if they perform the same operation with slight variations; in such cases, name the file to reflect the function’s overall purpose.
 
 ## SEO friendly Website
 
-// Guide for SEO-friendly HTML page structure
+This section explains how to create SEO-friendly pages in this project. Following these practices helps search engine crawlers better understand and index our content.
+
+### 1. HTML Structure
+
+Use semantic HTML5 elements to give meaning to page structure. This helps search engines understand content hierarchy.
+
+**Key Principles:**
+
+- Use proper heading hierarchy (`<h1>`, `<h2>`, `<h3>`, etc.) - only one `<h1>` per page
+- Use semantic elements: `<header>`, `<main>`, `<section>`, `<footer>`, `<nav>`, `<article>`
+- Always include the `lang` attribute in `<html>` tag for language specification
+- Ensure all images have descriptive `alt` attributes
+
+**Implementation in This Project:**
+
+The main HTML structure is defined in `app/[locale]/layout.tsx`:
+
+```tsx
+<html lang={locale}>
+  <head>{/* Metadata and structured data */}</head>
+  <body>
+    <AppHeader /> {/* Site header with navigation */}
+    {children} {/* Page-specific content wrapped in <main> */}
+    <AppFooter /> {/* Site footer */}
+  </body>
+</html>
+```
+
+All page content should be wrapped in semantic elements. Use the `AppSection` component for consistent section structure.
+
+### 2. Metadata
+
+Metadata provides information about our page to search engines and social media platforms. It includes the page title, description, keywords, and social media tags (Open Graph, Twitter Cards).
+
+**Why It Matters:**
+
+- **Title tag** - Appears in search results and browser tabs
+- **Description** - Shows up in search results as page summary
+- **Keywords** - Helps categorize our content
+- **Open Graph tags** - Controls how our page looks when shared on social media
+
+**Implementation in This Project:**
+
+**Step 1: Define Site Configuration** (`data/metadata.ts`)
+
+```typescript
+export const siteConfig = {
+  name: 'NTT DATA Malaysia',
+  description: { en: '...', ms: '...' },
+  url: 'https://www.nttdatapay.com/my',
+  ogImage: '/images/og-image.jpg',
+};
+
+export const baseKeywords = ['NTT DATA', 'IT consulting', ...];
+```
+
+**Step 2: Generate Page Metadata** (use in `page.tsx` files)
+
+```typescript
+import { generatePageMetadata } from '@/utils/generatePageMetadata';
+
+export async function generateMetadata({ params }): Promise<Metadata> {
+  const { locale } = await params;
+
+  return generatePageMetadata({
+    locale,
+    title: 'Page Title',
+    description: 'Page description',
+    keywords: ['additional', 'keywords'], // Optional
+    path: 'about', // Page path
+    type: 'website', // or 'article' for blog posts
+  });
+}
+```
+
+The system automatically handles:
+
+- Full title generation (adds site name)
+- Multi-language support
+- Open Graph and Twitter Card tags
+- SEO-friendly URLs
+
+### 3. Structured Data
+
+Structured data (JSON-LD format) helps search engines understand our content better. It can enable rich results in search like breadcrumbs, ratings, and enhanced listings.
+
+**Why It Matters:**
+
+- Improves how search engines interpret our content
+- Can display rich snippets in search results
+- Helps with local SEO and business information
+- Supports breadcrumb navigation in search results
+
+**Implementation in This Project:**
+
+**Available Schema Types** (defined in `data/structured-data.ts`):
+
+- **Organization** - Business information (name, address, contact)
+- **WebSite** - Website-level information
+- **WebPage** - Individual page information
+- **BreadcrumbList** - Navigation breadcrumbs
+
+**Step 1: Global Schemas** (automatically included in `layout.tsx`)
+
+```tsx
+// These are added to every page automatically
+const organizationSchema = generateOrganizationSchema(locale);
+const websiteSchema = generateWebSiteSchema(locale);
+
+<head>
+  <StructuredData data={[organizationSchema, websiteSchema]} />
+</head>;
+```
+
+**Step 2: Page-Level Schemas** (add to specific pages)
+
+```tsx
+import StructuredData from '@/utils/structuredData';
+import { generateWebPageSchema, generateBreadcrumbSchema } from '@/data/structured-data';
+
+export default async function Page({ params }) {
+  const { locale } = await params;
+
+  // Generate schemas
+  const webPageSchema = generateWebPageSchema(
+    'Page Title',
+    'Page description',
+    'https://example.com/page',
+    locale
+  );
+
+  const breadcrumbSchema = generateBreadcrumbSchema(
+    [{ name: 'Category', url: 'https://example.com/category' }, { name: 'Current Page' }],
+    locale
+  );
+
+  return (
+    <>
+      <StructuredData data={[webPageSchema, breadcrumbSchema]} />
+      {/* Page content */}
+    </>
+  );
+}
+```
+
+**Testing Structured Data:**
+
+- Use [Google Rich Results Test](https://validator.schema.org/) to validate schemas
+- Check for errors and ensure all required fields are present
 
 ## Code Quality
 
@@ -203,3 +353,136 @@ This section describes the organization of the project’s source code, componen
 
 - Use `AppLink` wherever a navigation or redirection link is needed in the UI.
 - Pass `iconBefore` or `iconAfter` to include icons alongside text.
+
+## AppBreadcrumb Component
+
+`AppBreadcrumb` displays a navigation breadcrumb trail that helps users understand their current location within the website hierarchy.
+
+### Props
+
+- `items` (required): An array of breadcrumb items. Each item should have:
+  - `label` (required): The text to display for the breadcrumb.
+  - `href` (optional): The URL to link to. If not provided or if it's the last item, it will be displayed as plain text.
+- `className` (optional): Additional custom CSS classes. If the class includes `text-black`, the breadcrumb will use a black color variant instead of the default white.
+
+### Usage
+
+- Use `AppBreadcrumb` at the top of pages to show navigation hierarchy.
+- The last item in the breadcrumb is automatically styled as the current page (non-clickable).
+- Example:
+  ```tsx
+  <AppBreadcrumb
+    items={[
+      { label: 'Home', href: '/' },
+      { label: 'Blog', href: '/blog' },
+      { label: 'Current Article' },
+    ]}
+  />
+  ```
+
+## AppCard Component
+
+`AppCard` is a reusable card component that displays content with a background image, title, and a link. Commonly used for blog posts, news articles, or featured content.
+
+### Props
+
+- `title` (required): The main heading text displayed on the card.
+- `backgroundImage` (required): The filename of the image to display as the card background (located in `/public/images/`).
+- `linkText` (required): The text for the link/button at the bottom of the card.
+- `link` (optional): The URL the card should link to.
+- `type` (optional): A label or category displayed above the title (e.g., "Blog", "News").
+- `iconAfter` (optional): Name of the icon to display after the link text. Defaults to `ArrowRight`.
+
+### Usage
+
+- Use `AppCard` to display content previews in grid layouts.
+- The card includes an overlay effect on hover for better visual interaction.
+- Example:
+  ```tsx
+  <AppCard
+    type="Blog"
+    title="Digital Transformation 2024"
+    backgroundImage="card-img-1.jpg"
+    linkText="Read More"
+    link="/blog/digital-transformation"
+  />
+  ```
+
+## AppFooter Component
+
+`AppFooter` is the main footer component that appears at the bottom of all pages. It contains company information, quick links, and contact details.
+
+### Props
+
+- No props required (static component).
+
+### Usage
+
+- Automatically included in the main layout (`app/[locale]/layout.tsx`).
+
+## AppHeader Component
+
+`AppHeader` is the main navigation header that appears at the top of all pages. It includes the logo, navigation menu, and language switcher.
+
+### Props
+
+- No props required (static component with dynamic translations).
+
+### Usage
+
+- Automatically included in the main layout (`app/[locale]/layout.tsx`).
+
+## AppIcon Component
+
+`AppIcon` is a wrapper component for rendering Phosphor icons consistently throughout the application.
+
+### Props
+
+- `name` (required): The name of the Phosphor icon to display (e.g., `ArrowRight`, `House`, `User`).
+- `size` (optional): The size of the icon in pixels. Defaults to `24`.
+- `color` (optional): The color of the icon. Defaults to `currentColor` (inherits from parent).
+- `weight` (optional): The icon style weight. Options: `thin`, `light`, `regular`, `bold`, `fill`, `duotone`. Defaults to `regular`.
+- `className` (optional): Additional custom CSS classes.
+
+### Usage
+
+- Use `AppIcon` whenever you need to display an icon from the Phosphor Icons library.
+- The component ensures type safety by only accepting valid Phosphor icon names.
+- Example:
+  ```tsx
+  <AppIcon name="ArrowRight" size={32} color="#007bff" weight="bold" />
+  ```
+
+## AppLanguageSwitcher Component
+
+`AppLanguageSwitcher` provides language switching functionality, allowing users to toggle between English and Malay versions of the website.
+
+### Props
+
+- No props required (uses hooks internally).
+
+### Usage
+
+- Automatically included in `AppHeader` component.
+- Displays two language options: Malay (ms) and English (en).
+- Preserves the current page path when switching languages.
+- Language labels are fetched from translation files.
+- When clicked, reloads the current page with the selected language.
+
+## AppPageNotFound Component
+
+`AppPageNotFound` is a specialized component that displays a user-friendly 404 error page when a requested page is not found.
+
+### Props
+
+- No props required (uses translations internally).
+
+### Usage
+
+- Used in `app/[locale]/not-found.tsx` to handle 404 errors.
+- Displays:
+  - Error title (from translation: `NOT_FOUND.TITLE`)
+  - Error description (from translation: `NOT_FOUND.DESCRIPTION`)
+  - A link to return to the homepage
+- Wrapped in `AppSection` for consistent styling.
+- Example is already implemented in the project's not-found page.

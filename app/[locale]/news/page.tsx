@@ -4,7 +4,7 @@ import { siteConfig } from '@/data/metadata';
 import { generateWebPageSchema, generateBreadcrumbSchema } from '@/data/structured-data';
 import StructuredData from '@/utils/structuredData';
 import Image from 'next/image';
-import { getAllNews } from '@/utils/getArticlesContentByType';
+import { getAllNews } from '@/utils/fetchArticles';
 import AppLink from '../../../components/AppLink/AppLink';
 import { getTranslations } from 'next-intl/server';
 import AppBreadcrumb from '../../../components/AppBreadcrumb/AppBreadcrumb';

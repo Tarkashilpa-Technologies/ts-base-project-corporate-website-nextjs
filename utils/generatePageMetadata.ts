@@ -1,10 +1,11 @@
 import type { Metadata } from 'next';
-import { siteConfig } from '@/data/metadata';
+import { siteConfig, baseKeywords } from '@/data/metadata';
 
 interface GenerateMetadataParams {
   locale: string;
   title: string;
   description: string;
+  keywords?: string[];
   path?: string;
   image?: string;
   imageWidth?: number;
@@ -23,6 +24,7 @@ export function generatePageMetadata({
   locale,
   title,
   description,
+  keywords,
   path = '',
   image = siteConfig.ogImage,
   imageWidth = 1200,
@@ -34,6 +36,9 @@ export function generatePageMetadata({
   const url = path ? `${siteConfig.url}/${locale}/${path}` : `${siteConfig.url}/${locale}`;
   const fullTitle = `${title} | ${siteConfig.name}`;
   const alt = imageAlt || `${title} - ${siteConfig.name}`;
+
+  // Merge base keywords with page-specific keywords
+  const finalKeywords = keywords ? [...baseKeywords, ...keywords] : baseKeywords;
 
   const openGraphBase = {
     title: fullTitle,
@@ -57,6 +62,7 @@ export function generatePageMetadata({
   const metadata: Metadata = {
     title,
     description,
+    keywords: finalKeywords,
     openGraph,
     twitter: {
       title: fullTitle,

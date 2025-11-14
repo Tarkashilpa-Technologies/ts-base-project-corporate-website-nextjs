@@ -24,5 +24,10 @@
     "ABOUT": "Ketahui lebih lanjut tentang NTT DATA Malaysia, firma perunding IT terkemuka. Misi, nilai teras, dan dedikasi kami untuk membentuk masyarakat yang lebih baik melalui transformasi digital dan teknologi inovatif.",
     "BLOG": "Kekal dikemas kini dengan wawasan terkini kami mengenai teknologi, transformasi digital, dan inovasi industri. Terokai artikel, berita, dan pandangan pakar dari NTT DATA Malaysia.",
     "NEWS": "Kekal dikemas kini dengan berita dan pengumuman terkini dari NTT DATA Malaysia. Temui perkongsian, inovasi, dan perkembangan industri kami."
+  },
+  "NOT_FOUND": {
+    "TITLE": "404 - Halaman Tidak Ditemui",
+    "DESCRIPTION": "Halaman yang anda cari tidak wujud atau telah dipindahkan.",
+    "BACK_HOME": "Kembali ke Laman Utama"
   }
 }
