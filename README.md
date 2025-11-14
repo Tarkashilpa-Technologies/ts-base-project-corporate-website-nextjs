@@ -27,51 +27,53 @@ This project uses **Prettier** to maintain consistent code formatting.
 
 # File and Folder structure
 
-This section describes the organization of the project’s source code, components, styles, and assets. Following this structure helps maintain scalability, readability, and consistency across the project.
+This section describes the organization of the project's source code, components, styles, and assets. Following this structure helps maintain scalability, readability, and consistency across the project.
 
-├── app/ # Next.js **App Router**
-│ ├── [locale]/ # Dynamic locale folder for internationalization
-│ │ ├── layout.tsx # Layout wrapper for pages that define header, footer and overall structure of Website UI
-│ │ └── page.tsx # Homepage
-│ │
-│ └── other-page-folders/ # Additional page folders
+```plaintext
+├── app/                    # Next.js App Router
+│   ├── [locale]/          # Dynamic locale folder for internationalization
+│   │   ├── layout.tsx     # Layout wrapper for pages that define header, footer and overall structure of Website UI
+│   │   └── page.tsx       # Homepage
+│   │
+│   └── other-page-folders/ # Additional page folders
 │
-├── components/ # Reusable React components
-│ ├── Header/
-│ │ ├── Header.tsx
-│ │ └── Header.module.scss # Component-scoped SCSS
-│ ├── Section/
-│ │ ├── Section.tsx
-│ │ └── Section.module.scss
-│ ├── YourComponent/
-│ │ ├── YourComponent.tsx
-│ │ └── YourComponent.module.scss
-│ └── Footer/
-│ ├── Footer.tsx
-│ └── Footer.module.scss
+├── components/             # Reusable React components
+│   ├── Header/
+│   │   ├── Header.tsx
+│   │   └── Header.module.scss  # Component-scoped SCSS
+│   ├── Section/
+│   │   ├── Section.tsx
+│   │   └── Section.module.scss
+│   ├── YourComponent/
+│   │   ├── YourComponent.tsx
+│   │   └── YourComponent.module.scss
+│   └── Footer/
+│       ├── Footer.tsx
+│       └── Footer.module.scss
 │
-├── styles/ # Global SCSS and partials
-│ ├── \_variables.scss # Colors, fonts, and other SCSS variables
-│ ├── \_mixins.scss # Reusable mixins
-│ ├── \_functions.scss # SCSS helper functions
-│ ├── \_globals.scss # Base/global styles (body, typography)
-│ ├── \_reset.scss # CSS reset or normalize
-│ ├── \_layout.scss # Generic layout utilities (grid, spacing)
-│ ├── \_utils.scss # Common utility styles shared across the project
-│ └── main.scss # Main SCSS file that imports all partials
+├── styles/                 # Global SCSS and partials
+│   ├── _variables.scss    # Colors, fonts, and other SCSS variables
+│   ├── _mixins.scss       # Reusable mixins
+│   ├── _functions.scss    # SCSS helper functions
+│   ├── _globals.scss      # Base/global styles (body, typography)
+│   ├── _reset.scss        # CSS reset or normalize
+│   ├── _layout.scss       # Generic layout utilities (grid, spacing)
+│   ├── _utils.scss        # Common utility styles shared across the project
+│   └── main.scss          # Main SCSS file that imports all partials
 │
 ├── public/
-│ └── images/ # Static assets (images, icons, etc.)
+│   └── images/            # Static assets (images, icons, etc.)
 │
-├── i18n/ # Internationalization (i18n) setup
-│ ├── en.json # English translations
-│ ├── ms.json # Malay translations
-│ ├── routing.ts # Routing-related helper functions
-│ ├── navigation.ts # Navigation and menu translations
-│ └── request.ts # Fetch/format localized data
+├── i18n/                  # Internationalization (i18n) setup
+│   ├── en.json           # English translations
+│   ├── ms.json           # Malay translations
+│   ├── routing.ts        # Routing-related helper functions
+│   ├── navigation.ts     # Navigation and menu translations
+│   └── request.ts        # Fetch/format localized data
 │
-├── middleware.ts # Next.js middleware for locale detection, redirects, etc.
-└── package.json # Project dependencies and scripts
+├── middleware.ts          # Next.js middleware for locale detection, redirects, etc.
+└── package.json           # Project dependencies and scripts
+```
 
 # Project Architecture
 
