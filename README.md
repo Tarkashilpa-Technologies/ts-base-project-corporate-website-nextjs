@@ -530,3 +530,27 @@ This project uses a custom 404 page that is always shown inside the normal layou
   - A link to return to the homepage
 - Wrapped in `AppSection` for consistent styling.
 - Example is already implemented in the project's not-found page.
+
+## AppKeywordHighlighter Component
+
+`AppKeywordHighlighter` is a utility component that highlights specific keywords within text by wrapping them in styled spans.
+
+### Props
+
+- `text` (required): The text content to search through and highlight keywords in.
+- `keywords` (required): A single keyword string or an array of keywords to highlight.
+- `className` (optional): Additional CSS classes to apply to highlighted spans.
+- `caseSensitive` (optional): Whether keyword matching should be case-sensitive. Defaults to `false`.
+
+### Usage
+
+- Use `AppKeywordHighlighter` when you need to emphasize specific words or phrases in text content.
+- The component automatically prioritizes longer keyword matches over shorter ones to prevent substring conflicts.
+- Returns the original text unchanged if no keywords are provided or text is empty.
+- Example:
+  ```tsx
+  <AppKeywordHighlighter
+    text="Welcome to NTT DATA Malaysia, your trusted IT consulting partner"
+    keywords={['NTT DATA', 'IT consulting']}
+  />
+  ```

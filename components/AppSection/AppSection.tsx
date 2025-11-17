@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import AppKeywordHighlighter from '../AppKeywordHighlighter/AppKeywordHighlighter';
 import styles from './AppSection.module.scss';
 
 export default function AppSection({
@@ -6,11 +7,13 @@ export default function AppSection({
   subtitle,
   children,
   className = '',
+  highlightWord,
 }: Readonly<{
   title?: string;
   subtitle?: string;
   children: ReactNode;
   className?: string;
+  highlightWord?: string | string[];
 }>) {
   return (
     <section className={`${className} ${styles.sectionPadding}`}>
@@ -19,7 +22,11 @@ export default function AppSection({
           <h2
             className={`mb-64px ${styles.titleFont}  ${className.includes('bg-light') ? 'text-black' : 'text-white'}`}
           >
-            {title}
+            {highlightWord ? (
+              <AppKeywordHighlighter text={title} keywords={highlightWord} />
+            ) : (
+              title
+            )}
           </h2>
         )}
         {subtitle && (

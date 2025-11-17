@@ -124,6 +124,7 @@ export default async function Home({
           title="We're ONE NTT DATA"
           subtitle="From strategic consulting to leading-edge technologies, we enable experiences that transform organizations, disrupt industries, and shape a better society for all."
           className="bg-light"
+          highlightWord={[`We're`, `NTT`]}
         >
           <AppLink
             text="Learn more About Us"
