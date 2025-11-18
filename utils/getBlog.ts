@@ -46,8 +46,8 @@ export async function getAllBlogs(locale: string = 'en'): Promise<BlogArticle[]>
 }
 
 /**
- * Get a single blog article by slug for a specific locale
- * Returns the article with parsed HTML content
+ * Get a single blog article by slug with full content
+ * Returns null if article not found
  */
 export async function getBlogBySlug(
   slug: string,
@@ -93,21 +93,58 @@ export async function getBlogBySlug(
 }
 
 /**
- * Get all unique topics from blog articles for a specific locale
+ * Get all unique topics from blog articles
+ * Returns array of unique topics sorted alphabetically
  */
 export async function getAllTopics(locale: string = 'en'): Promise<string[]> {
-  const allBlogs = await getAllBlogs(locale);
-  const topics = allBlogs.map((article) => article.topic);
-  return Array.from(new Set(topics));
+  try {
+    const blogs = await getAllBlogs(locale);
+    const topics = blogs.map((blog) => blog.topic);
+    const uniqueTopics = Array.from(new Set(topics));
+    return uniqueTopics.sort((a, b) => a.localeCompare(b));
+  } catch (error) {
+    console.error('Error fetching topics:', error);
+    return [];
+  }
 }
 
 /**
- * Get blog articles filtered by topic for a specific locale
+ * Get blog articles filtered by topic
+ * Returns array of articles sorted by date (newest first)
  */
 export async function getBlogsByTopic(
   topic: string,
   locale: string = 'en'
 ): Promise<BlogArticle[]> {
-  const allBlogs = await getAllBlogs(locale);
-  return allBlogs.filter((article) => article.topic === topic);
+  try {
+    const res = await fetch(
+      `${process.env.STRAPI_URL}/api/articles?filters[topic][$eq]=${encodeURIComponent(topic)}&locale=${locale}`,
+      { cache: 'no-store' }
+    );
+
+    if (!res.ok) {
+      console.error(`Failed to fetch articles for topic: ${topic}`);
+      return [];
+    }
+
+    const data = await res.json();
+    const articles = data?.data || [];
+
+    // Map Strapi response to BlogArticle interface
+    const blogs: BlogArticle[] = articles.map((article: any) => ({
+      slug: article.slug,
+      date: article.publishedAt,
+      topic: article.topic,
+      title: article.title,
+      description: article.description,
+    }));
+
+    // Sort by date (newest first)
+    return blogs.sort((a, b) => {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
+  } catch (error) {
+    console.error(`Error fetching blogs by topic ${topic}:`, error);
+    return [];
+  }
 }
