@@ -17,13 +17,13 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations('PAGE_TITLE');
-  const tDesc = await getTranslations('PAGE_DESCRIPTION');
+  const tTitle = await getTranslations('PAGE_TITLE');
+  const tDescription = await getTranslations('PAGE_DESCRIPTION');
 
   return generatePageMetadata({
     locale,
-    title: t('NEWS'),
-    description: tDesc('NEWS'),
+    title: tTitle('NEWS'),
+    description: tDescription('NEWS'),
     path: 'news',
   });
 }
@@ -35,11 +35,11 @@ export default async function News({
 }>) {
   const { locale } = await params;
   const tTitle = await getTranslations('PAGE_TITLE');
-  const tDesc = await getTranslations('PAGE_DESCRIPTION');
+  const tDescription = await getTranslations('PAGE_DESCRIPTION');
 
   // Generate page-specific structured data
   const title = tTitle('NEWS');
-  const description = tDesc('NEWS');
+  const description = tDescription('NEWS');
 
   const webPageSchema = generateWebPageSchema(
     title,

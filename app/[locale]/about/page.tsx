@@ -15,13 +15,13 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations('PAGE_TITLE');
-  const tDesc = await getTranslations('PAGE_DESCRIPTION');
+  const tTitle = await getTranslations('PAGE_TITLE');
+  const tDescription = await getTranslations('PAGE_DESCRIPTION');
 
   return generatePageMetadata({
     locale,
-    title: t('ABOUT'),
-    description: tDesc('ABOUT'),
+    title: tTitle('ABOUT'),
+    description: tDescription('ABOUT'),
     path: 'about',
   });
 }
@@ -32,12 +32,12 @@ export default async function About({
   params: Promise<{ locale: string }>;
 }>) {
   const { locale } = await params;
-  const t = await getTranslations('PAGE_TITLE');
-  const tDesc = await getTranslations('PAGE_DESCRIPTION');
+  const tTitle = await getTranslations('PAGE_TITLE');
+  const tDescription = await getTranslations('PAGE_DESCRIPTION');
 
   // Generate page-specific structured data
-  const title = t('ABOUT');
-  const description = tDesc('ABOUT');
+  const title = tTitle('ABOUT');
+  const description = tDescription('ABOUT');
 
   const webPageSchema = generateWebPageSchema(
     title,
@@ -61,7 +61,7 @@ export default async function About({
           </div>
           <div className="subpage-hero-text-container">
             <div className="content-wrapper h-100 d-flex flex-column justify-content-center align-items-start">
-              <AppBreadcrumb items={[{ label: t('HOME'), href: '/' }, { label: title }]} />
+              <AppBreadcrumb items={[{ label: tTitle('HOME'), href: '/' }, { label: title }]} />
               <h1 className="mb-3">{title}</h1>
             </div>
           </div>

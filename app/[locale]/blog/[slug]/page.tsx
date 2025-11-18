@@ -57,7 +57,7 @@ export default async function BlogPost({
 }>) {
   const { locale, slug } = await params;
   const article = await getBlogBySlug(slug, locale);
-  const t = await getTranslations('PAGE_TITLE');
+  const tTitle = await getTranslations('PAGE_TITLE');
 
   if (!article) {
     notFound();
@@ -77,8 +77,8 @@ export default async function BlogPost({
           <AppBreadcrumb
             className="text-black"
             items={[
-              { label: t('HOME'), href: '/' },
-              { label: t('BLOG'), href: '/blog' },
+              { label: tTitle('HOME'), href: '/' },
+              { label: tTitle('BLOG'), href: '/blog' },
               { label: article.title },
             ]}
           />

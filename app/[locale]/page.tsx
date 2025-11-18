@@ -37,12 +37,12 @@ export default async function Home({
   params: Promise<{ locale: string }>;
 }>) {
   const { locale } = await params;
-  const t = await getTranslations('PAGE_TITLE');
-  const tDesc = await getTranslations('PAGE_DESCRIPTION');
+  const tTitle = await getTranslations('PAGE_TITLE');
+  const tDescription = await getTranslations('PAGE_DESCRIPTION');
 
   // Generate page-specific structured data
-  const title = t('HOME');
-  const description = tDesc('HOME');
+  const title = tTitle('HOME');
+  const description = tDescription('HOME');
 
   const webPageSchema = generateWebPageSchema(
     title,

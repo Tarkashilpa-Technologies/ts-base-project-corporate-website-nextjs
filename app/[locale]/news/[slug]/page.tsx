@@ -57,7 +57,7 @@ export default async function NewsPost({
 }>) {
   const { locale, slug } = await params;
   const article = await getNewsBySlug(slug, locale);
-  const t = await getTranslations('PAGE_TITLE');
+  const tTitle = await getTranslations('PAGE_TITLE');
 
   if (!article) {
     notFound();
@@ -77,8 +77,8 @@ export default async function NewsPost({
           <AppBreadcrumb
             className="text-black"
             items={[
-              { label: t('HOME'), href: '/' },
-              { label: t('NEWS'), href: '/news' },
+              { label: tTitle('HOME'), href: '/' },
+              { label: tTitle('NEWS'), href: '/news' },
               { label: article.title },
             ]}
           />
