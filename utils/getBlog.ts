@@ -1,9 +1,3 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import matter from 'gray-matter';
-import { remark } from 'remark';
-import html from 'remark-html';
-
 // Define the blog article type
 export interface BlogArticle {
   slug: string;
@@ -14,108 +8,143 @@ export interface BlogArticle {
   content?: string;
 }
 
-// Get the blog directory path based on locale
-function getBlogDirectory(locale: string): string {
-  return path.join(process.cwd(), 'data', 'blog', locale);
-}
-
-// Convert markdown to HTML
-async function markdownToHtml(markdown: string): Promise<string> {
-  const result = await remark().use(html).process(markdown);
-  return result.toString();
-}
-
 /**
  * Get all blog articles for a specific locale
  * Returns array of articles sorted by date (newest first)
  */
 export async function getAllBlogs(locale: string = 'en'): Promise<BlogArticle[]> {
-  const blogDirectory = getBlogDirectory(locale);
+  try {
+    const res = await fetch(`${process.env.STRAPI_URL}/api/articles?locale=${locale}`, {
+      cache: 'no-store',
+    });
 
-  // Check if directory exists
-  if (!fs.existsSync(blogDirectory)) {
+    if (!res.ok) {
+      console.error('Failed to fetch articles from Strapi');
+      return [];
+    }
+
+    const data = await res.json();
+    const articles = data?.data || [];
+
+    // Map Strapi response to BlogArticle interface
+    const allBlogs: BlogArticle[] = articles.map((article: any) => ({
+      slug: article.slug,
+      date: article.publishedAt,
+      topic: article.topic,
+      title: article.title,
+      description: article.description,
+    }));
+
+    // Sort by date (newest first)
+    return allBlogs.sort((a, b) => {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
+  } catch (error) {
+    console.error('Error fetching blogs from Strapi:', error);
     return [];
   }
-
-  // Get all MDX files
-  const fileNames = fs.readdirSync(blogDirectory).filter((file) => file.endsWith('.mdx'));
-
-  const allBlogs = fileNames.map((fileName) => {
-    // Read file contents
-    const fullPath = path.join(blogDirectory, fileName);
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
-
-    // Parse frontmatter
-    const { data } = matter(fileContents);
-
-    // Return article metadata
-    return {
-      slug: data.slug,
-      date: data.date,
-      topic: data.topic,
-      title: data.title,
-      description: data.description,
-    } as BlogArticle;
-  });
-
-  // Sort by date (newest first)
-  return allBlogs.sort((a, b) => {
-    return new Date(b.date).getTime() - new Date(a.date).getTime();
-  });
 }
 
 /**
- * Get a single blog article by slug for a specific locale
- * Returns the article with parsed HTML content
+ * Get a single blog article by slug with full content
+ * Returns null if article not found
  */
 export async function getBlogBySlug(
   slug: string,
   locale: string = 'en'
 ): Promise<BlogArticle | null> {
-  const blogDirectory = getBlogDirectory(locale);
-  const filePath = path.join(blogDirectory, `${slug}.mdx`);
+  try {
+    const res = await fetch(
+      `${process.env.STRAPI_URL}/api/articles?filters[slug][$eq]=${slug}&locale=${locale}&populate=*`,
+      { cache: 'no-store' }
+    );
 
-  // Check if file exists
-  if (!fs.existsSync(filePath)) {
+    if (!res.ok) {
+      console.error(`Failed to fetch article with slug: ${slug}`);
+      return null;
+    }
+
+    const data = await res.json();
+    const article = data?.data?.[0];
+
+    if (!article) {
+      return null;
+    }
+
+    // Extract content from blocks (rich-text component)
+    const richTextBlock = article.blocks?.find(
+      (block: any) => block.__component === 'shared.rich-text'
+    );
+    const content = richTextBlock?.body || '';
+
+    // Return complete article with content
+    return {
+      slug: article.slug,
+      date: article.publishedAt,
+      topic: article.topic,
+      title: article.title,
+      description: article.description,
+      content: content,
+    };
+  } catch (error) {
+    console.error(`Error fetching blog by slug ${slug}:`, error);
     return null;
   }
-
-  // Read file contents
-  const fileContents = fs.readFileSync(filePath, 'utf8');
-
-  // Parse frontmatter and content
-  const { data, content } = matter(fileContents);
-
-  // Convert markdown to HTML
-  const htmlContent = await markdownToHtml(content);
-
-  // Return article with content
-  return {
-    slug: data.slug,
-    date: data.date,
-    topic: data.topic,
-    title: data.title,
-    description: data.description,
-    content: htmlContent,
-  } as BlogArticle;
 }
 
 /**
- * Get all unique topics from blog articles for a specific locale
+ * Get all unique topics from blog articles
+ * Returns array of unique topics sorted alphabetically
  */
 export async function getAllTopics(locale: string = 'en'): Promise<string[]> {
-  const allBlogs = await getAllBlogs(locale);
-  const topics = allBlogs.map((article) => article.topic);
-  return Array.from(new Set(topics));
+  try {
+    const blogs = await getAllBlogs(locale);
+    const topics = blogs.map((blog) => blog.topic);
+    const uniqueTopics = Array.from(new Set(topics));
+    return uniqueTopics.sort((a, b) => a.localeCompare(b));
+  } catch (error) {
+    console.error('Error fetching topics:', error);
+    return [];
+  }
 }
 
 /**
- * Get blog articles filtered by topic for a specific locale
+ * Get blog articles filtered by topic
+ * Returns array of articles sorted by date (newest first)
  */
 export async function getBlogsByTopic(
   topic: string,
   locale: string = 'en'
 ): Promise<BlogArticle[]> {
-  const allBlogs = await getAllBlogs(locale);
-  return allBlogs.filter((article) => article.topic === topic);
+  try {
+    const res = await fetch(
+      `${process.env.STRAPI_URL}/api/articles?filters[topic][$eq]=${encodeURIComponent(topic)}&locale=${locale}`,
+      { cache: 'no-store' }
+    );
+
+    if (!res.ok) {
+      console.error(`Failed to fetch articles for topic: ${topic}`);
+      return [];
+    }
+
+    const data = await res.json();
+    const articles = data?.data || [];
+
+    // Map Strapi response to BlogArticle interface
+    const blogs: BlogArticle[] = articles.map((article: any) => ({
+      slug: article.slug,
+      date: article.publishedAt,
+      topic: article.topic,
+      title: article.title,
+      description: article.description,
+    }));
+
+    // Sort by date (newest first)
+    return blogs.sort((a, b) => {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
+  } catch (error) {
+    console.error(`Error fetching blogs by topic ${topic}:`, error);
+    return [];
+  }
 }

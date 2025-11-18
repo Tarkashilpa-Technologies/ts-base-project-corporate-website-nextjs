@@ -4,7 +4,7 @@ import { siteConfig } from '@/data/metadata';
 import { generateWebPageSchema, generateBreadcrumbSchema } from '@/data/structured-data';
 import StructuredData from '@/utils/structuredData';
 import Image from 'next/image';
-import { getAllBlogs } from '@/utils/fetchArticles';
+import { getAllBlogs } from '@/utils/getBlog';
 import { getTranslations } from 'next-intl/server';
 import AppLink from '../../../components/AppLink/AppLink';
 import AppBreadcrumb from '../../../components/AppBreadcrumb/AppBreadcrumb';
@@ -17,13 +17,13 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations('PAGE_TITLE');
-  const tDesc = await getTranslations('PAGE_DESCRIPTION');
+  const tTitle = await getTranslations('PAGE_TITLE');
+  const tDescription = await getTranslations('PAGE_DESCRIPTION');
 
   return generatePageMetadata({
     locale,
-    title: t('BLOG'),
-    description: tDesc('BLOG'),
+    title: tTitle('BLOG'),
+    description: tDescription('BLOG'),
     path: 'blog',
   });
 }
@@ -36,11 +36,11 @@ export default async function Blog({
   const { locale } = await params;
   const t = await getTranslations('COMMON');
   const tTitle = await getTranslations('PAGE_TITLE');
-  const tDesc = await getTranslations('PAGE_DESCRIPTION');
+  const tDescription = await getTranslations('PAGE_DESCRIPTION');
 
   // Generate page-specific structured data
   const title = tTitle('BLOG');
-  const description = tDesc('BLOG');
+  const description = tDescription('BLOG');
 
   const webPageSchema = generateWebPageSchema(
     title,
