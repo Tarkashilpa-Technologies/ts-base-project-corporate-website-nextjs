@@ -1,9 +1,3 @@
-import fs from 'node:fs';
-import path from 'node:path';
-import matter from 'gray-matter';
-import { remark } from 'remark';
-import html from 'remark-html';
-
 // Define the blog article type
 export interface BlogArticle {
   slug: string;
@@ -14,54 +8,41 @@ export interface BlogArticle {
   content?: string;
 }
 
-// Get the blog directory path based on locale
-function getBlogDirectory(locale: string): string {
-  return path.join(process.cwd(), 'data', 'blog', locale);
-}
-
-// Convert markdown to HTML
-async function markdownToHtml(markdown: string): Promise<string> {
-  const result = await remark().use(html).process(markdown);
-  return result.toString();
-}
-
 /**
  * Get all blog articles for a specific locale
  * Returns array of articles sorted by date (newest first)
  */
 export async function getAllBlogs(locale: string = 'en'): Promise<BlogArticle[]> {
-  const blogDirectory = getBlogDirectory(locale);
+  try {
+    const res = await fetch(`${process.env.STRAPI_URL}/api/articles?locale=${locale}`, {
+      cache: 'no-store',
+    });
 
-  // Check if directory exists
-  if (!fs.existsSync(blogDirectory)) {
+    if (!res.ok) {
+      console.error('Failed to fetch articles from Strapi');
+      return [];
+    }
+
+    const data = await res.json();
+    const articles = data?.data || [];
+
+    // Map Strapi response to BlogArticle interface
+    const allBlogs: BlogArticle[] = articles.map((article: any) => ({
+      slug: article.slug,
+      date: article.publishedAt,
+      topic: article.topic,
+      title: article.title,
+      description: article.description,
+    }));
+
+    // Sort by date (newest first)
+    return allBlogs.sort((a, b) => {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    });
+  } catch (error) {
+    console.error('Error fetching blogs from Strapi:', error);
     return [];
   }
-
-  // Get all MDX files
-  const fileNames = fs.readdirSync(blogDirectory).filter((file) => file.endsWith('.mdx'));
-
-  const allBlogs = fileNames.map((fileName) => {
-    // Read file contents
-    const fullPath = path.join(blogDirectory, fileName);
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
-
-    // Parse frontmatter
-    const { data } = matter(fileContents);
-
-    // Return article metadata
-    return {
-      slug: data.slug,
-      date: data.date,
-      topic: data.topic,
-      title: data.title,
-      description: data.description,
-    } as BlogArticle;
-  });
-
-  // Sort by date (newest first)
-  return allBlogs.sort((a, b) => {
-    return new Date(b.date).getTime() - new Date(a.date).getTime();
-  });
 }
 
 /**
@@ -72,32 +53,43 @@ export async function getBlogBySlug(
   slug: string,
   locale: string = 'en'
 ): Promise<BlogArticle | null> {
-  const blogDirectory = getBlogDirectory(locale);
-  const filePath = path.join(blogDirectory, `${slug}.mdx`);
+  try {
+    const res = await fetch(
+      `${process.env.STRAPI_URL}/api/articles?filters[slug][$eq]=${slug}&locale=${locale}&populate=*`,
+      { cache: 'no-store' }
+    );
 
-  // Check if file exists
-  if (!fs.existsSync(filePath)) {
+    if (!res.ok) {
+      console.error(`Failed to fetch article with slug: ${slug}`);
+      return null;
+    }
+
+    const data = await res.json();
+    const article = data?.data?.[0];
+
+    if (!article) {
+      return null;
+    }
+
+    // Extract content from blocks (rich-text component)
+    const richTextBlock = article.blocks?.find(
+      (block: any) => block.__component === 'shared.rich-text'
+    );
+    const content = richTextBlock?.body || '';
+
+    // Return complete article with content
+    return {
+      slug: article.slug,
+      date: article.publishedAt,
+      topic: article.topic,
+      title: article.title,
+      description: article.description,
+      content: content,
+    };
+  } catch (error) {
+    console.error(`Error fetching blog by slug ${slug}:`, error);
     return null;
   }
-
-  // Read file contents
-  const fileContents = fs.readFileSync(filePath, 'utf8');
-
-  // Parse frontmatter and content
-  const { data, content } = matter(fileContents);
-
-  // Convert markdown to HTML
-  const htmlContent = await markdownToHtml(content);
-
-  // Return article with content
-  return {
-    slug: data.slug,
-    date: data.date,
-    topic: data.topic,
-    title: data.title,
-    description: data.description,
-    content: htmlContent,
-  } as BlogArticle;
 }
 
 /**
