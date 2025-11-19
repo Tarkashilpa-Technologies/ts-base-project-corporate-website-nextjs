@@ -1,3 +1,6 @@
+import { remark } from 'remark';
+import html from 'remark-html';
+
 // Define the blog article type
 export interface BlogArticle {
   slug: string;
@@ -6,6 +9,12 @@ export interface BlogArticle {
   title: string;
   description: string;
   content?: string;
+}
+
+// Convert markdown to HTML
+async function markdownToHtml(markdown: string): Promise<string> {
+  const result = await remark().use(html).process(markdown);
+  return result.toString();
 }
 
 /**
@@ -48,14 +57,20 @@ export async function getAllBlogs(locale: string = 'en'): Promise<BlogArticle[]>
 /**
  * Get a single blog article by slug with full content
  * Returns null if article not found
+ * @param slug - The article slug
+ * @param locale - The locale (en, ms)
+ * @param isDraft - If true, fetches draft content (preview mode)
  */
 export async function getBlogBySlug(
   slug: string,
-  locale: string = 'en'
+  locale: string = 'en',
+  isDraft: boolean = false
 ): Promise<BlogArticle | null> {
   try {
+    // Add publicationState parameter for preview mode
+    const publicationState = isDraft ? 'draft' : 'published';
     const res = await fetch(
-      `${process.env.STRAPI_URL}/api/articles?filters[slug][$eq]=${slug}&locale=${locale}&populate=*`,
+      `${process.env.STRAPI_URL}/api/articles?filters[slug][$eq]=${slug}&locale=${locale}&populate=*&status=${publicationState}`,
       { cache: 'no-store' }
     );
 
@@ -77,14 +92,17 @@ export async function getBlogBySlug(
     );
     const content = richTextBlock?.body || '';
 
-    // Return complete article with content
+    // Convert markdown to HTML
+    const htmlContent = await markdownToHtml(content);
+
+    // Return complete article with parsed HTML content
     return {
       slug: article.slug,
       date: article.publishedAt,
       topic: article.topic,
       title: article.title,
       description: article.description,
-      content: content,
+      content: htmlContent,
     };
   } catch (error) {
     console.error(`Error fetching blog by slug ${slug}:`, error);

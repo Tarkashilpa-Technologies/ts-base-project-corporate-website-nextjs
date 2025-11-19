@@ -1,10 +1,12 @@
-import { getBlogBySlug, getAllBlogs } from '@/utils/fetchArticles';
+import { getAllBlogs, getBlogBySlug } from '@/utils/getBlog';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import AppSection from '../../../../components/AppSection/AppSection';
 import AppBreadcrumb from '../../../../components/AppBreadcrumb/AppBreadcrumb';
+import AppPreviewBanner from '../../../../components/AppPreviewBanner/AppPreviewBanner';
 import { generatePageMetadata } from '@/utils/generatePageMetadata';
 import { getTranslations } from 'next-intl/server';
+import { draftMode } from 'next/headers';
 
 // Generate static params for all blog articles
 export async function generateStaticParams() {
@@ -56,7 +58,10 @@ export default async function BlogPost({
   params: Promise<{ locale: string; slug: string }>;
 }>) {
   const { locale, slug } = await params;
-  const article = await getBlogBySlug(slug, locale);
+  const { isEnabled } = await draftMode();
+
+  // Fetch article with draft mode awareness
+  const article = await getBlogBySlug(slug, locale, isEnabled);
   const tTitle = await getTranslations('PAGE_TITLE');
 
   if (!article) {
@@ -72,6 +77,7 @@ export default async function BlogPost({
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between pt-80px">
+      {isEnabled && <AppPreviewBanner locale={locale} />}
       <article>
         <AppSection className="bg-light text-black">
           <AppBreadcrumb

@@ -29,5 +29,9 @@
     "TITLE": "404 - Halaman Tidak Ditemui",
     "DESCRIPTION": "Halaman yang anda cari tidak wujud atau telah dipindahkan.",
     "BACK_HOME": "Kembali ke Laman Utama"
+  },
+  "PREVIEW_BANNER": {
+    "MESSAGE": "Mod Pratonton Aktif - Melihat Kandungan Draf",
+    "EXIT_BUTTON": "Keluar Pratonton"
   }
 }

@@ -81,20 +81,15 @@ interface AppButtonProps {
   className?: string;
 }
 
-const AppButton: React.FC<AppButtonProps> = ({
-  text,
-  onClick,
-  variant = 'primary',
-  className = '',
-}) => {
+export default function AppButton(props: Readonly<{ AppButtonProps }>) {
+  const { text, onClick, variant = 'primary', className = '' } = props;
+
   return (
     <button className={`${styles.button} ${styles[variant]} ${className}`} onClick={onClick}>
       {text}
     </button>
   );
-};
-
-export default AppButton;
+}
 ```
 
 ### Component Styles Template
@@ -151,7 +146,7 @@ export default AppButton;
 - ✅ Ensure 0 SonarLint warnings
 - ✅ Avoid in-line styling as much as possible
 - ✅ Always try to use predefined classes
-- ✅ Use Bootstrap breakpoints for responsiveness
+- ✅ Always use Bootstrap SCSS mixins for responsiveness
 
 ---
 

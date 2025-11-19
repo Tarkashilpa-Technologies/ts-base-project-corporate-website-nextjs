@@ -29,5 +29,9 @@
     "TITLE": "404 - Page Not Found",
     "DESCRIPTION": "The page you are looking for does not exist or has been moved.",
     "BACK_HOME": "Back to Home"
+  },
+  "PREVIEW_BANNER": {
+    "MESSAGE": "Preview Mode Active - Viewing Draft Content",
+    "EXIT_BUTTON": "Exit Preview"
   }
 }

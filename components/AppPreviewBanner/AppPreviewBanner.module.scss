@@ -1,0 +1,53 @@
+@import '../../styles/bootstrap-api.scss';
+.previewBanner {
+  background: linear-gradient(90deg, #ff9800 0%, #ff5722 100%);
+  color: black;
+  padding: 16px 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+
+  @include media-breakpoint-up(md) {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+.message {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+}
+
+.icon {
+  font-size: 1.5rem;
+}
+
+.text {
+  font-size: 1rem;
+}
+
+.exitButton {
+  background-color: white !important;
+  color: black;
+  padding: 8px 24px !important;
+  border-radius: 4px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all 0.3s ease;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.9) !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+}
