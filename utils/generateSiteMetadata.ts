@@ -13,7 +13,7 @@ export function generateSiteMetadata(locale: string): Metadata {
   return {
     title: {
       default: metadata.title,
-      template: `%s | ${metadata.title}`,
+      template: `%s`,
     },
     description: metadata.description,
     applicationName: siteConfig.name,

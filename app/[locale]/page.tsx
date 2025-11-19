@@ -16,13 +16,13 @@ export async function generateMetadata({
   params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
   const { locale } = await params;
-  const t = await getTranslations('PAGE_TITLE');
-  const tDesc = await getTranslations('PAGE_DESCRIPTION');
+  const tTitle = await getTranslations('PAGE_TITLE');
+  const tDescription = await getTranslations('PAGE_DESCRIPTION');
 
   return generatePageMetadata({
     locale,
-    title: t('HOME'),
-    description: tDesc('HOME'),
+    title: tTitle('HOME'),
+    description: tDescription('HOME'),
     path: '',
     image: '/images/top-kv_05_sp.jpg',
     imageWidth: 1500,
