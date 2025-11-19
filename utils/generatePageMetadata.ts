@@ -34,7 +34,7 @@ export function generatePageMetadata({
   publishedTime,
 }: GenerateMetadataParams): Metadata {
   const url = path ? `${siteConfig.url}/${locale}/${path}` : `${siteConfig.url}/${locale}`;
-  const fullTitle = `${title} | ${siteConfig.name}`;
+  const fullTitle = `${siteConfig.name} | ${title}`;
   const alt = imageAlt || `${title} - ${siteConfig.name}`;
 
   // Merge base keywords with page-specific keywords
@@ -60,7 +60,7 @@ export function generatePageMetadata({
     type === 'article' && publishedTime ? { ...openGraphBase, publishedTime } : openGraphBase;
 
   const metadata: Metadata = {
-    title,
+    title: fullTitle,
     description,
     keywords: finalKeywords,
     openGraph,
