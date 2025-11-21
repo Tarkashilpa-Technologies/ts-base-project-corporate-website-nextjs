@@ -1,0 +1,33 @@
+@import '../../styles/bootstrap-api.scss';
+
+.cardDark {
+  display: flex;
+  flex-direction: column;
+  padding: 24px 20px;
+  background: #141b31;
+  color: #e8e8e8;
+  line-height: 1.5;
+}
+
+.title {
+  margin-bottom: 12px;
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1.2;
+
+  @include media-breakpoint-down(md) {
+    font-size: 32px;
+  }
+}
+
+.subtitle {
+  margin-bottom: 16px;
+  font-size: 16px;
+  font-weight: 400;
+}
+
+.description {
+  margin-bottom: 24px;
+  font-size: 12px;
+  font-weight: 400;
+}

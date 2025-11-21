@@ -1,40 +1,10 @@
-// TypeScript Interfaces for About Us Page from Strapi
+import qs from 'qs';
+import { StrapiAboutUsPage } from '@/types/StrapiAboutUsPage';
 
-interface StrapiImage {
-  id: number;
-  documentId: string;
-  name: string;
-  alternativeText: string | null;
-  caption: string | null;
-  width: number;
-  height: number;
-  url: string;
-  formats?: any;
-}
-
-interface SectionContent {
-  id: number;
-  title: string;
-  subtitle: string | null;
-  content: string;
-  backgroundColorLight: boolean;
-  linkType: string | null;
-  link: string | null;
-  linkTextToDisplay: string | null;
-}
-
-interface AboutSection {
-  id: number;
-  section: SectionContent;
-}
-
-export interface AboutUsPage {
-  heroTitle: string;
-  heroSubtitle: string;
-  heroImage: StrapiImage | null;
-  allSections: AboutSection[];
-  locale: string;
-}
+// Re-export types for backward compatibility
+export type { StrapiAllOurValues as AllOurValues } from '@/types/StrapiAllOurValues';
+export type { StrapiCard as Card } from '@/types/StrapiCard';
+export type { StrapiAboutUsPage as AboutUsPage } from '@/types/StrapiAboutUsPage';
 
 /**
  * Get About Us page data from Strapi
@@ -45,18 +15,50 @@ export interface AboutUsPage {
 export async function getAboutUsPage(
   locale: string = 'en',
   isDraft: boolean = false
-): Promise<AboutUsPage | null> {
+): Promise<StrapiAboutUsPage | null> {
   try {
-    // Add publicationState parameter for preview mode
-    const publicationState = isDraft ? 'draft' : 'published';
+    // Define the populate structure for Strapi
+    const populateConfig = {
+      heroImage: { populate: '*' },
+      sectionOnePlayImage: { populate: '*' },
+      sectionOnePDF: { populate: '*' },
+      allSections: {
+        populate: {
+          section: { populate: '*' },
+        },
+      },
+      aboutUsSectionTwoCards: { populate: '*' },
+      cardsBelowOurValues: {
+        populate: {
+          image: { populate: '*' },
+          link: { populate: '*' },
+        },
+      },
+      allOurValues: { populate: '*' },
+      ourValuesImage: { populate: '*' },
+      ourValuesLink: { populate: '*' },
+      messageFromCEOLink: { populate: '*' },
+      ourLeadershipImage: { populate: '*' },
+    };
 
-    // Fetch with 2-level deep population for nested sections
-    const url = `${process.env.STRAPI_URL}/api/about-us-page?locale=${locale}&populate[heroImage]=*&populate[allSections][populate][section]=*&status=${publicationState}`;
+    // Build query parameters using qs
+    const queryParams = {
+      locale,
+      populate: populateConfig,
+      status: isDraft ? 'draft' : 'published',
+    };
+
+    const queryString = qs.stringify(queryParams, {
+      encodeValuesOnly: true, // Keeps the structure clean
+    });
+
+    const url = `${process.env.STRAPI_URL}/api/about-us-page?${queryString}`;
 
     const res = await fetch(url, { cache: 'no-store' });
 
     if (!res.ok) {
       console.error('Failed to fetch About Us page from Strapi');
+      console.error(res);
       return null;
     }
 
@@ -74,6 +76,17 @@ export async function getAboutUsPage(
       heroImage: data.heroImage,
       allSections: data.allSections || [],
       locale: data.locale,
+      sectionOnePlayImage: data.sectionOnePlayImage,
+      sectionOnePDF: data.sectionOnePDF,
+      sectionOneVideoLink: data.sectionOneVideoLink,
+      aboutUsSectionTwoCards: data.aboutUsSectionTwoCards || [],
+      cardsBelowOurValues: data.cardsBelowOurValues || [],
+      allOurValues: data.allOurValues || [],
+      ourValuesImage: data.ourValuesImage,
+      ourValuesTitle: data.ourValuesTitle,
+      ourValuesLink: data.ourValuesLink,
+      messageFromCEOLink: data.messageFromCEOLink,
+      ourLeadershipImage: data.ourLeadershipImage,
     };
   } catch (error) {
     console.error('Error fetching About Us page:', error);
@@ -82,14 +95,14 @@ export async function getAboutUsPage(
 }
 
 /**
- * Helper function to get full image URL
+ * Helper function to get full media URL (images, PDFs, documents, etc.)
  * Handles both relative and absolute URLs
  */
-export function getImageUrl(url: string): string {
+export function getMediaUrl(url: string): string {
   if (url.startsWith('http')) {
     return url;
   }
-  return `${process.env.NEXT_PUBLIC_STRAPI_URL || process.env.STRAPI_URL}${url}`;
+  return `${process.env.STRAPI_URL}${url}`;
 }
 
 /**

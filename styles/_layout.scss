@@ -19,7 +19,6 @@
 .three-columns-grid {
   display: grid;
   grid-template-columns: 1fr;
-  // grid-auto-rows: 460px;
   gap: 50px;
 
   @include media-breakpoint-up(md) {
@@ -28,6 +27,17 @@
 
   @include media-breakpoint-up(lg) {
     grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.two-columns-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 40px;
+
+  @include media-breakpoint-up(md) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 48px;
   }
 }
 

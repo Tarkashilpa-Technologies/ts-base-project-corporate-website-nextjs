@@ -1,3 +1,5 @@
+@import 'bootstrap-api';
+
 .overlay-wrapper {
   position: relative;
 
@@ -28,4 +30,40 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
+}
+
+.five-line-truncate {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.hover-zoom-wrapper {
+  overflow: hidden;
+
+  img {
+    object-fit: cover;
+    width: 100%;
+    transition: transform 0.3s ease-out;
+  }
+  &:hover img {
+    transform: scale(1.05); // enlarge 5%
+  }
+}
+
+// Responsive font size classes
+.fs-responsive-lg {
+  font-size: 32px;
+  @include media-breakpoint-up(md) {
+    font-size: 40px;
+  }
+}
+
+.fs-responsive-md {
+  font-size: 24px;
+  @include media-breakpoint-up(md) {
+    font-size: 32px;
+  }
 }

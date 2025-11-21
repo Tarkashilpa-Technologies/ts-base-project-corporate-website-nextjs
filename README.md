@@ -452,6 +452,75 @@ This project uses a custom 404 page that is always shown inside the normal layou
   />
   ```
 
+## AppCardDark Component
+
+`AppCardDark` is a dark-themed card component designed for displaying content with a dark background. It features a title, subtitle, description, and a link, making it ideal for highlighting key information or services.
+
+### Props
+
+- `title` (required): The main heading text displayed on the card.
+- `subtitle` (required): Secondary text displayed below the title.
+- `description` (required): Detailed descriptive text about the content.
+- `linkUrl` (optional): The URL the link should navigate to.
+- `linkText` (required): The text for the link at the bottom of the card.
+- `linkType` (optional): The type of link styling. Options: `Primary Link`, `Secondary Link`, `Tertiary Link`, `Button Link`. Defaults to `Tertiary Link`.
+- `className` (optional): Additional custom CSS classes.
+
+### Usage
+
+- Use `AppCardDark` to display information in a dark-themed card format.
+- The component automatically applies responsive font sizing (56px on desktop, 32px on mobile for the title).
+- The link variant is automatically determined from the `linkType` prop using the `getLinkVariant` helper.
+- Example:
+  ```tsx
+  <AppCardDark
+    title="Top 10"
+    subtitle="Global IT services provider"
+    description="Our unique portfolio meets clients' needs for tomorrow, today."
+    linkText="Explore our services"
+    linkUrl="/services"
+    linkType="Tertiary Link"
+  />
+  ```
+
+## AppCardWithImageTop Component
+
+`AppCardWithImageTop` is a card component with the image positioned at the top.
+
+### Props
+
+- `title` (required): The main heading text displayed below the image.
+- `description` (required): Detailed descriptive text about the content (automatically truncated to 5 lines).
+- `image` (required): The filename of the image to display at the top (located in `/public/images/`).
+- `linkText` (required): The text for the link at the bottom of the card.
+- `link` (required): The URL the link should navigate to.
+- `iconAfter` (optional): Name of the icon to display after the link text. Defaults to `ArrowRight`.
+
+### Layout Specifications
+
+- **Total card height:** 580px
+- **Image section:** 330px height with hover scale effect (1.05x zoom)
+- **Content section:** Remaining 250px for title, description, and link
+- **Title styling:** Uses `fs-responsive-md` class (24px mobile, 32px desktop) with 16px vertical margin
+- **Description:** Normal font size with automatic 5-line truncation and 24px bottom margin
+- **Link:** Uses `primaryLink` variant with 24px bottom margin
+
+### Usage
+
+- Use `AppCardWithImageTop` to display content with image-first layout.
+- The image scales smoothly on hover for visual interaction.
+- Description text is automatically truncated to 5 lines to maintain consistent card height.
+- Example:
+  ```tsx
+  <AppCardWithImageTop
+    title="Digital Transformation 2024"
+    description="Discover the latest trends and innovations in digital transformation..."
+    image="card-img-1.jpg"
+    linkText="Read More"
+    link="/blog/digital-transformation"
+  />
+  ```
+
 ## AppFooter Component
 
 `AppFooter` is the main footer component that appears at the bottom of all pages. It contains company information, quick links, and contact details.
