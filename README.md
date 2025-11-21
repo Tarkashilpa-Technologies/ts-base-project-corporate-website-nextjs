@@ -147,6 +147,7 @@ This section describes the organization of the project's source code, components
 ## Naming Notes
 
 - **Avoid abbreviations:** Use clear, meaningful names in CSS, style files, components, functions, and any other place where naming is required.
+- **Overriding Predefined Styles:** To maintain consistent styling and prevent unexpected UI bugs, avoid overriding default HTML tag styles (like h1, p, ul, etc.) and Bootstrap’s built-in classes (like .btn, .container, .row, etc.).
 - **Component names:** The component name must match its file name exactly.
 - **Class naming conventions:**
   - **Module-specific classes** (CSS Modules) → `camelCase`
