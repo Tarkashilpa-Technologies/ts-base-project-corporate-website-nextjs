@@ -24,9 +24,11 @@ This guide provides quick references and best practices for creating new compone
 │   ├── _variables.scss       # Colors, fonts, spacing
 │   ├── _mixins.scss          # Reusable mixins
 │   ├── _functions.scss       # SCSS helper functions
-│   ├── _globals.scss         # Base styles
-│   ├── _utils.scss           # Common utilities
-│   └── main.scss             # Main import file
+│   ├── _globals.scss         # Base/global styles (body, typography)
+│   ├── _reset.scss           # CSS reset or normalize
+│   ├── _layout.scss          # Generic layout utilities (grid, spacing)
+│   ├── _utils.scss           # Common utility styles shared across the project
+│   └── main.scss             # Main SCSS file that imports all partials
 │
 ├── i18n/                      # Translations
 │   ├── en.json               # English
@@ -147,6 +149,8 @@ export default function AppButton(props: Readonly<{ AppButtonProps }>) {
 - ✅ Avoid in-line styling as much as possible
 - ✅ Always try to use predefined classes
 - ✅ Always use Bootstrap SCSS mixins for responsiveness
+- ✅ Prefix SCSS classes with 'app-' (e.g., `app-text-center`) to avoid conflicts with Bootstrap/external libraries
+- ✅ Avoid overriding default HTML tag styles (h1, p, ul) and Bootstrap's built-in classes (.btn, .container, .row)
 
 ---
 
@@ -406,9 +410,19 @@ Create a new SCSS partial when you have:
 ### Code Quality
 
 - **Zero SonarLint warnings** - fix all issues before committing
-- Use meaningful, non-abbreviated names
+- Use meaningful, non-abbreviated names (name variables as nouns, functions as verb+noun)
 - Add comments for complex logic
 - Follow TypeScript best practices
+- Maximize use of reusable utility/component classes; avoid context-specific classes
+  - **Reusable:** `.text-center`, `.mt-20`
+  - **Avoid:** `.homepage-banner-button`
+- **Utility file naming:** Name files according to the exported function; keep one main function per file unless functions perform similar operations
+
+### Use of Anchor Tag (`<a>`)
+
+- All internal navigation should use the `<Link>` component from Next.js
+- `<Link>` renders an `<a>` tag automatically for SEO
+- This allows search engine crawlers to detect and index internal pages
 
 ### SEO Requirements
 
@@ -501,4 +515,4 @@ Refer to README.md "Components" section for detailed documentation on:
 
 ---
 
-**Last Updated:** November 2025
+**Last Updated:** 25 November 2025

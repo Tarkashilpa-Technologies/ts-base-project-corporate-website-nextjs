@@ -146,13 +146,14 @@ This section describes the organization of the project's source code, components
 
 ## Naming Notes
 
-- **Avoid abbreviations:** Use clear, meaningful names in CSS, style files, components, functions, and any other place where naming is required.
+- **Avoid abbreviations:** Use clear, meaningful names in CSS, style files, components, functions, and any other place where naming is required; as a general rule, name variables as nouns and functions as verb+noun.
 - **Overriding Predefined Styles:** To maintain consistent styling and prevent unexpected UI bugs, avoid overriding default HTML tag styles (like h1, p, ul, etc.) and Bootstrap’s built-in classes (like .btn, .container, .row, etc.).
 - **Component names:** The component name must match its file name exactly.
 - **Class naming conventions:**
   - **Module-specific classes** (CSS Modules) → `camelCase`
   - **Common/global styles** → `kebab-case`
 - **SCSS variables:** Always use `kebab-case` for naming variables (e.g., `$primary-color`, `$font-size-large`).
+- **Prefix SCSS Classes:** When writing SCSS (or CSS) classes, always add a 'app-' prefix to class names to avoid conflicts or unintended overrides from external libraries such as Bootstrap (e.g app-text-center).
 - **Utility:** Name the file according to the function it exports. It’s generally a good idea to keep one main function per utility file for clarity. Include more than one function in a utility file if they perform the same operation with slight variations; in such cases, name the file to reflect the function’s overall purpose.
 
 ## SEO friendly Website
@@ -343,10 +344,23 @@ This project uses a custom 404 page that is always shown inside the normal layou
 - This is correct and safe for SEO: search engines understand that the page does not exist.
 - Real pages (like `/en/about`, `/en/blog/[slug]`, etc.) still return **200** and can be indexed normally.
 
+### 5. Use of Anchor Tag (`<a></a>`)
+
+All internal page and section navigation links should explicitly use the `<a>` tag so that SEO crawlers can detect additional pages and render their content effectively.
+
+In Next.js, the `<Link>` component renders an `<a>` tag automatically. Therefore, it is recommended to use `<Link>` for most internal navigation, as it provides both SEO benefits and optimized client-side routing.
+
 ## Code Quality
 
 - **SonarLint** is configured in this project to ensure high code quality.
 - All code should be written so that **SonarLint reports 0 warnings**.
+- Maximize the use of reusable classes (utility or component) whenever possible, avoid context specific classes.
+  - **Examples**
+  - **Reusable Utility Classes**  
+    .text-center { text-align: center; }
+    .mt-20 { margin-top: 20px; }
+  - **Context-Specific Class**
+    .homepage-banner-button { @extend .button; background-color: green; }
 
 ## Git Workflow
 
